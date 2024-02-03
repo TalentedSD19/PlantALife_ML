@@ -21,9 +21,6 @@ from dotenv import load_dotenv,dotenv_values
 
 load_dotenv()
 
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
-
 
 
 # Load YOLOv5 model
