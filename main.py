@@ -1,17 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import cv2
-import torch
-from yolov5.models.experimental import attempt_load
-from yolov5.utils.general import non_max_suppression
-from yolov5.utils.torch_utils import select_device
 import numpy as np
 import base64
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 import pathlib
 import os
-import time
 from PIL import Image
 import io
 from pathlib import Path
