@@ -161,7 +161,7 @@ def detect_plant(imagedata:str):
 
 @app.post("/compare_faces")
 def compare_faces(image:str,profile_pic:str):
-    api_key = "qwf2FygdDziA1lqw1voQ1Fep4IetPKjBZlB8m0BX"
+    api_key = "AIzaSyDQZ2qIlPJW0TX8goQJi8uVVG4uBMp1E4s"
     genai.configure(api_key=api_key)
 
     # Set up the model
@@ -222,7 +222,7 @@ def compare_faces(image:str,profile_pic:str):
     
 @app.post("/find_plants")
 def find_plants(image:str):
-    api_key = "qwf2FygdDziA1lqw1voQ1Fep4IetPKjBZlB8m0BX"
+    api_key = "AIzaSyDQZ2qIlPJW0TX8goQJi8uVVG4uBMp1E4s"
     genai.configure(api_key=api_key)
 
     # Set up the model
