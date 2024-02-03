@@ -1,7 +1,6 @@
 fastapi
 uvicorn
 opencv-python
-yolov5
 numpy
 requests
 python-multipart
