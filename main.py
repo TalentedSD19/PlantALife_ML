@@ -83,7 +83,7 @@ async def detect_face(imagedata:str):
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         shape = img.shape
         x,y = shape[0]//2,shape[1]//2
-        print(x,y)
+        # print(x,y)
         # Perform object detection
         # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         # img = cv2.resize(img, (x,y))
@@ -98,7 +98,7 @@ async def detect_face(imagedata:str):
         for (x, y, w, h) in faces:
             # cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
             img_cropped = img[y:y+h,x:x+w]
-            cv2.imwrite("./face.jpg", img_cropped)
+            ### cv2.imwrite("./face.jpg", img_cropped)
         # Save the result image (optional)
         print(faces)
         if not len(faces):
@@ -153,7 +153,7 @@ def detect_plant(imagedata:str):
                 plant = 'plant detected'
                 plant_bool = True
                 image_cropped = image[x:x+w,y:y+h]
-                cv2.imwrite("plant.jpg", image_cropped)
+                ### cv2.imwrite("plant.jpg", image_cropped)
 
         if plant_bool:
             output = plant
@@ -230,9 +230,9 @@ def verify(input : Input):
         img1 = get_image_base64(input.image_url)
         img2 = get_image_base64(input.profile_pic_url)
         if detect_plant(img1) and compare_faces(img1,img2):
-            return "bingo"
+            return True
         else:
-            return "oh no"
+            return False
     except requests.RequestException as e:
         raise HTTPException(status_code=500, detail=f"Error fetching the image: {str(e)}")
     
