@@ -5,3 +5,4 @@ numpy
 requests
 python-multipart
 google.generativeai
+dotenv
