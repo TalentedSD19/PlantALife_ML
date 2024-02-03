@@ -300,7 +300,6 @@ def verify(input : Input):
 @app.post("/generative_ai")
 async def generative_ai(prompt:str):
 
-
     API_BASE_URL = "https://api.cloudflare.com/client/v4/accounts/83268b3dbc596d0ff47c79398333a126/ai/run/"
     API_KEY = "qwf2FygdDziA1lqw1voQ1Fep4IetPKjBZlB8m0BX"
     headers = {"Authorization": f"Bearer {API_KEY}"}
@@ -325,8 +324,3 @@ async def distance(coordinate:Coordinate ):
     print(f"Metres: {meters:.2f}")
 
 
-@app.post("/gen")
-async def handle_request(request: Request):
-    payload = await request.json()
-    intent = payload['queryResult']['intent']['displayName']
-    print(intent)
