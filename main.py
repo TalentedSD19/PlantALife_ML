@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import requests
 import pathlib
 import os
-from PIL import Image
+# from PIL import Image
 import io
 from pathlib import Path
 import google.generativeai as genai
