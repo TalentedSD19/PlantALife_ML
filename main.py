@@ -16,10 +16,10 @@ from PIL import Image
 import io
 from pathlib import Path
 import google.generativeai as genai
-# from dotenv import load_dotenv,dotenv_values
+from dotenv import load_dotenv,dotenv_values
 # from deepface import DeepFace
 
-# load_dotenv()
+load_dotenv()
 
 temp = pathlib.PosixPath
 pathlib.PosixPath = pathlib.WindowsPath
@@ -166,7 +166,7 @@ def detect_plant(imagedata:str):
 
 @app.post("/compare_faces")
 def compare_faces(image:str,profile_pic:str):
-    api_key = "AIzaSyDQZ2qIlPJW0TX8goQJi8uVVG4uBMp1E4s"
+    api_key = os.getenv("GEMINI_API_KEY")
     genai.configure(api_key=api_key)
 
     # Set up the model
@@ -227,7 +227,7 @@ def compare_faces(image:str,profile_pic:str):
     
 @app.post("/find_plants")
 def find_plants(image:str):
-    api_key = "AIzaSyDQZ2qIlPJW0TX8goQJi8uVVG4uBMp1E4s"
+    api_key = os.getenv("GEMINI_API_KEY")
     genai.configure(api_key=api_key)
 
     # Set up the model
@@ -300,7 +300,7 @@ async def generative_ai(prompt:str):
 
 
     API_BASE_URL = "https://api.cloudflare.com/client/v4/accounts/83268b3dbc596d0ff47c79398333a126/ai/run/"
-    API_KEY = "qwf2FygdDziA1lqw1voQ1Fep4IetPKjBZlB8m0BX"
+    API_KEY = os.getenv("CLOUDFLARE_API_KEY")
     headers = {"Authorization": f"Bearer {API_KEY}"}
     inputs = {
         "messages":[
