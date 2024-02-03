@@ -11,6 +11,8 @@ import os
 import io
 from pathlib import Path
 import google.generativeai as genai
+from geopy.distance import geodesic
+from fastapi import Request 
 # from dotenv import load_dotenv,dotenv_values
 # from deepface import DeepFace
 
@@ -37,6 +39,11 @@ class ImageData(BaseModel):
 class Input(BaseModel):
     image_url: str
     profile_pic_url:str
+
+class Coordinate(BaseModel):
+    latitude:float
+    longitude: float
+
 
 origins = ["*"]
 app.add_middleware(
@@ -308,3 +315,18 @@ async def generative_ai(prompt:str):
     
 
 
+@app.post("/distance")
+async def distance(coordinate:Coordinate ):
+    lat = coordinate.latitude
+    long = coordinate.longitude
+    new = (f"{lat}, {long}")
+    old = ("22.63542611922154, 88.37535833445298")
+    meters = geodesic(new,old).meters
+    print(f"Metres: {meters:.2f}")
+
+
+@app.post("/gen")
+async def handle_request(request: Request):
+    payload = await request.json()
+    intent = payload['queryResult']['intent']['displayName']
+    print(intent)
