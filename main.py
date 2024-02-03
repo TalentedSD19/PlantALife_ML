@@ -21,15 +21,16 @@ import google.generativeai as genai
 
 # load_dotenv()
 
-
+temp = pathlib.PosixPath
+pathlib.PosixPath = pathlib.WindowsPath
 
 # Load YOLOv5 model
 
-weight = 'plant.pt'
-absolute_path = os.path.abspath(weight)
-device = select_device('')
-model = attempt_load(absolute_path, device)
-stride = int(model.stride.max())
+# weight = 'plant.pt'
+# absolute_path = os.path.abspath(weight)
+# device = select_device('')
+# model = attempt_load(absolute_path, device)
+# stride = int(model.stride.max())
 
 
 app = FastAPI()
@@ -56,8 +57,8 @@ def root():
     return {"Plant": "ASAP"}
 
 # Load the pre-trained Haar Cascade face detection model
-haar = 'C:\D\KODING SHITZ\personal\Diversion\Backend\haarcascade_frontalface_alt2.xml'
-face_cascade = cv2.CascadeClassifier(haar)
+# haar = 'C:\D\KODING SHITZ\personal\Diversion\Backend\haarcascade_frontalface_alt2.xml'
+# face_cascade = cv2.CascadeClassifier(haar)
 
 @app.post("/get_image_base64")
 def get_image_base64(image_url: str):
@@ -223,13 +224,69 @@ def compare_faces(image:str,profile_pic:str):
         return True
     else:
         return False 
+    
+@app.post("/find_plants")
+def find_plants(image:str):
+    api_key = "AIzaSyDQZ2qIlPJW0TX8goQJi8uVVG4uBMp1E4s"
+    genai.configure(api_key=api_key)
+
+    # Set up the model
+    generation_config = {
+    "temperature": 0.4,
+    "top_p": 1,
+    "top_k": 32,
+    "max_output_tokens": 4096,
+    }
+
+    safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+    },
+    ]
+
+    model = genai.GenerativeModel(model_name="gemini-pro-vision",
+                                generation_config=generation_config,
+                                safety_settings=safety_settings)
+        # Validate that an image is present
+
+    image_parts = [
+    {
+        "mime_type": "image/jpeg",
+        "data": image
+    },
+    ]
+
+    prompt_parts = [
+    image_parts[0],
+    "\n\n",
+    "\n\nAnalyze the given base64 image. if there is freshly planted baby plant present in the picture then return 'True' else return 'False'",
+    ]
+
+    response = model.generate_content(prompt_parts)
+    if response.text[1:]=="True":
+        return True
+    else:
+        return False 
 
 @app.post("/verify")
 def verify(input : Input):
     try:
         img1 = get_image_base64(input.image_url)
         img2 = get_image_base64(input.profile_pic_url)
-        if detect_plant(img1) and compare_faces(img1,img2):
+        if find_plants(img1) and compare_faces(img1,img2):
             return True
         else:
             return False
