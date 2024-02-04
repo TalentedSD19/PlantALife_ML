@@ -13,6 +13,7 @@ from pathlib import Path
 import google.generativeai as genai
 from geopy.distance import geodesic
 from fastapi import Request 
+from fastapi.responses import JSONResponse
 # from dotenv import load_dotenv,dotenv_values
 # from deepface import DeepFace
 
@@ -312,6 +313,27 @@ async def generative_ai(prompt:str):
     response = requests.post(f"{API_BASE_URL}@cf/meta/llama-2-7b-chat-int8", headers=headers, json=inputs)
     return response.json()["result"]["response"]
     
+
+@app.post("/generative_ai2")
+async def generative_ai2(request: Request):
+    payload = await request.json()
+    prompt = payload['queryResult']['queryText']
+    print(prompt)
+    API_BASE_URL = "https://api.cloudflare.com/client/v4/accounts/83268b3dbc596d0ff47c79398333a126/ai/run/"
+    API_KEY = "qwf2FygdDziA1lqw1voQ1Fep4IetPKjBZlB8m0BX"
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+    inputs = {
+        "messages":[
+        { "role": "system", "content": "You are a friendly assistant with knowledge about botany and flora that answers user's queries in an easy to understand manner" },
+        { "role": "user", "content": f"{prompt}"}
+    ]
+    }
+    response = requests.post(f"{API_BASE_URL}@cf/meta/llama-2-7b-chat-int8", headers=headers, json=inputs)
+    output = response.json()["result"]["response"]
+    return JSONResponse(content={
+    "fulfillmentText" : f"{output}"})
+
+
 
 
 @app.post("/distance")
