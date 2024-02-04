@@ -290,9 +290,9 @@ def verify(input : Input):
         img1 = get_image_base64(input.image_url)
         img2 = get_image_base64(input.profile_pic_url)
         if find_plants(img1) and compare_faces(img1,img2):
-            return True
+            return {'response':True}
         else:
-            return False
+            return {'response':False}
     except requests.RequestException as e:
         raise HTTPException(status_code=500, detail=f"Error fetching the image: {str(e)}")
     
